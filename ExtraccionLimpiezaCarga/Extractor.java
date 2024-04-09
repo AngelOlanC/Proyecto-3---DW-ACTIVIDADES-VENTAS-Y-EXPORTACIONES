@@ -7,6 +7,7 @@ public class Extractor{
     private final BufferedReader bf;
     public Extractor(String src) throws FileNotFoundException {
         bf = new BufferedReader(new FileReader(src));
+        
     }
 
     public boolean hasNextTuple() throws IOException {
