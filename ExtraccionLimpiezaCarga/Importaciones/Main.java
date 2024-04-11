@@ -1,109 +1,109 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Main {
-  private static String normalizarCiudad(String ciudad) {
-    StringBuilder cd = new StringBuilder(ciudad);
-    for (int i = 0; i < cd.length(); i++) {
-      if (cd.charAt(i) == ' ') {
-        cd.setCharAt(i + 1, Character.toUpperCase(cd.charAt(i + 1)));
+  private static void ETLArchivo1(SQLServerConnection db, Connection conn) 
+      throws FileNotFoundException, IOException, SQLException {
+    Extractor extractor = new Extractor("ExtraccionLimpiezaCarga/Datos/ImportacionAutos111.csv");
+    extractor.nextTuple();
+
+    System.out.println("Extractor 1 creado");
+    
+    ResultSet rs = conn.createStatement().executeQuery("SELECT numero FROM Auxiliar.Cuenta2022");
+    rs.next();
+    Integer cnt = rs.getInt(1);
+
+    // ESTADO,CIUDAD,MARCA,MODELO,AÑO,FECHA,PRECIO
+    String insertStatement = "INSERT INTO OLTP.Importaciones" +
+                            "(estado, ciudad, marca, modelo, año, fecha, precio, medioDeTransporte, paisDeOrigen)" +
+                              " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    PreparedStatement ps = conn.prepareStatement(insertStatement);
+    // ARCHIVO -> ESTADO,CIUDAD,MARCA,MODELO,AÑO,FECHA,PRECIO
+    while (extractor.hasNextTuple()) {
+      String tuple[] = extractor.nextTuple();
+      for (int i = 0; i < tuple.length; i++) {
+        tuple[i] = Rutinas.normalizarAtributo(tuple[i]);
       }
+      ps.setString(1, Rutinas.normalizarEstado(tuple[0]));
+      ps.setString(2, Rutinas.normalizarCiudad(tuple[1]));
+      ps.setString(3, tuple[2]);
+      ps.setString(4, tuple[3]);
+      ps.setString(5, tuple[4]);
+      ps.setString(6, Rutinas.normalizarFecha(tuple[5]));
+      ps.setString(7, tuple[6]); 
+      ps.setString(8, Rutinas.getModoDeTransporte(Integer.parseInt(tuple[4]), Rutinas.normalizarEstado(tuple[0]), cnt));
+      ps.setString(9, Rutinas.getPaisOrigen(tuple[2]));
+      ps.executeUpdate();
     }
-    cd.setCharAt(0, Character.toUpperCase(cd.charAt(0)));
-
-    ciudad = cd.toString();
-    return switch (ciudad) {
-      case "Mztl" -> "Mazatlan";
-      case "Cln" -> "Culiacan";
-      case "Chi" -> "Chiapas";
-      case "Gve" -> "Guasave";
-      case "Ixtlan Dle Rio" -> "Ixtlan Del Rio";
-      case "Cd. Guzman" -> "Ciudad Guzman";
-      default -> ciudad;
-    };
+    conn.createStatement().executeUpdate("UPDATE Auxiliar.Cuenta2022 set numero = " + cnt);
+    System.out.println("Terminamos con el archivo 1");
   }
 
-  private static String normalizarEstado(String estado) {
-    estado = Character.toUpperCase(estado.charAt(0)) + estado.substring(1);
-    return switch (estado) {
-      case "Dur" -> "Durango";
-      case "Bc" -> "Baja California";
-      case "Bcs" -> "Baja California Sur";
-      case "Son" -> "Sonora";
-      case "Sin" -> "Sinaloa";
-      case "Nay" -> "Nayarit";
-      case "Chi" -> "Chiapas";
-      case "Nl" -> "Nuevo Leon";
-      default -> estado;
-    };
-  }
+  private static void ETLArchivo2(SQLServerConnection db, Connection conn) 
+      throws FileNotFoundException, IOException, SQLException {
+    Extractor extractor = new Extractor("ExtraccionLimpiezaCarga/Datos/synergy_logistics_database111.csv");
+    extractor.nextTuple();
+    
+    ResultSet rs = conn.createStatement().executeQuery("SELECT numero FROM Auxiliar.Cuenta2022");
+    rs.next();
+    Integer cnt = rs.getInt(1);
+  
+    String insertStatement = "INSERT INTO OLTP.Importaciones" +
+                            "(estado, ciudad, marca, modelo, año, fecha, precio, medioDeTransporte, paisDeOrigen)" +
+                              " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    PreparedStatement ps = conn.prepareStatement(insertStatement);
+    // 1 - direction, 2 - origin, 3 - destination, 4 - year, 5 - date, 6 -product,
+    // 7 - transport_mode, 8 - company_name, 9 - total_value
+    while (extractor.hasNextTuple()) {
+      String tuple[] = extractor.nextTuple();
+      
+      if (!tuple[3].equals("Mexico")) {
+        continue;
+      }
 
-  private static String getPaisOrigen(String marcaVehiculo) {
-    return switch (marcaVehiculo) {
-      case "ford", "dodge", "chevrolet" -> "USA";
-      case "dina", "vw" -> "Japon";
-      default -> "Externo";
-    };
+      String[] destino = Rutinas.generarDestinoAleatoriamente();
+      ps.setString(1, destino[0]);
+      ps.setString(2, destino[1]);
+      ps.setString(3, tuple[8]);
+      ps.setString(4, tuple[6]);
+      ps.setString(5, tuple[4]);
+      ps.setString(6, Rutinas.normalizarFecha(tuple[5]));
+      ps.setString(7, tuple[9]); 
+      ps.setString(8, tuple[7]);
+      ps.setString(9, tuple[2]);
+      ps.executeUpdate();
+    }
+    conn.createStatement().executeUpdate("UPDATE Auxiliar.Cuenta2022 set numero = " + cnt);
+    System.out.println("Terminamos con el archivo 2");
   }
-
-  private static String getModoDeTransporte(int year, String estado) {
-    return switch (year) {
-      case 2020 -> esEstadoDelNorte(estado) ? "Carretera" : "Tren";
-      case 2021 -> getMedioDeTransporteRandom();
-      case 2022 -> "a";
-      default -> "Externo";
-    };
-  }
-
-  private static boolean esEstadoDelNorte(String estado) {
-    return estado.equals("Baja California") || 
-           estado.equals("Baja California Sur") || estado.equals("Sonora") || 
-           estado.equals("Sinaloa") || estado.equals("Nuevo Leon") || 
-           estado.equals("Coahuila") || estado.equals("Tamaulipas") || 
-           estado.equals("Durango") || estado.equals("Chihuahua");
-  }
-
-  private static String getMedioDeTransporteRandom() {
-    Random o = new Random();
-    int random = o.nextInt(4);
-    return switch (random) {
-      case 0 -> "Carretera";
-      case 1 -> "Maritimo";
-      case 2 -> "Aereo";
-      case 3 -> "Tren";
-      default -> "?";
-    };
-  }
-
 
   public static void main(String[] args) {
+    SQLServerConnection db;
+    Connection conn;
     try {
-      SQLServerConnection db = new SQLServerConnection("localhost", "Importaciones", "sa", "Aa252328");
-
-      // ARCHIVO 1
-      Extractor extractor = new Extractor("ExtraccionLimpiezaCarga/Datos/ImportacionAutos111.csv");
-      extractor.nextTuple();
-      
-      // ESTADO,CIUDAD,MARCA,MODELO,AÑO,FECHA,PRECIO
-
-      int cnt = 0;
-      HashSet<String> hs = new HashSet<>();
-      while (extractor.hasNextTuple()) {
-        String tuple[] = extractor.nextTuple();
-        for (String attribute : tuple) {
-          attribute = attribute.trim().toLowerCase();
-        }
-        if (tuple[tuple.length - 2].contains("2022")) {
-          cnt++; // 1665889 y faltan de contar las del segundo archivo 
-        }
-        // meter tupla
-      }
-      System.out.println(cnt);
-
-      // ARCHIVO 2
+      db = new SQLServerConnection("localhost", "Importaciones", "sa", "Aa252328");
+      conn = db.getConnection();
     } catch (Exception e) {
       System.out.println(e.getMessage());
+      return;
+    }
+
+    db.beginTran();
+    System.out.println("Se inicia la transaccion");
+    
+    try {
+      ETLArchivo1(db, conn);
+      ETLArchivo2(db, conn);
+      db.commitTran();
+      System.out.println("COMMIT");
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      System.out.println("Rollback");
+      db.rollbackTran();
     }
   }
 }
