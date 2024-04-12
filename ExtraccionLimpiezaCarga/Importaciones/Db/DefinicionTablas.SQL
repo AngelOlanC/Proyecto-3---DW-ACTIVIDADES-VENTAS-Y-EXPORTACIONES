@@ -6,6 +6,7 @@ go
 
 create schema OLTP
 go
+
 create table OLTP.Importaciones(
   ID int identity primary key not null,
   Estado nvarchar(40) not null,
@@ -22,8 +23,7 @@ go
 
 select * from OLTP.Importaciones
 go
--- FOLIO,FECHA,ESTADO,CIUDAD,TIENDA,EMPLEADO
--- 00000001,18/mar/20,25,1,61,93
+
 create table OLTP.TicketsH(
 	ticket int primary key not null,
 	fecha date not null,
@@ -33,15 +33,13 @@ create table OLTP.TicketsH(
 	empleado int not null
 )
 go
---FOLIO,PRODUCTO,UNIDADES,PRECIO,TOTAL
---00000001,330,3,506.00,$1 518.00
+
 create table OLTP.TicketsD(
-	ticket int not null foreign key references OLTP.TicketsH(folio),
+	ticket int not null foreign key references OLTP.TicketsH(ticket),
 	producto int not null,
 	unidades int not null,
-	precio decimal(16, 2) not null,
-	total decimal(16, 2) not null,
-	primary key(folio, producto),
+	precio decimal(16, 2) not null
+	primary key(ticket, producto)
 )
 go
 --------------------------------- DIMENSIONES USADAS EN LAS VM

@@ -15,7 +15,8 @@ public class Main {
     Connection conexion = db.getConnection();
     
     st = conexion.prepareStatement(query);
-
+      
+    System.out.println("Empezamos con TicketsH");
     while (extractorTicketH.hasNextTuple()) {
       String[] tupla = extractorTicketH.nextTuple();
       tupla[1] = Rutinas.corregirFecha(tupla[1]);
@@ -24,17 +25,17 @@ public class Main {
       }
       st.executeUpdate();
     }
-
+    
     Extractor extractorTicketD = new Extractor("ExtraccionLimpiezaCarga/Datos/TicketD.csv");
     extractorTicketD.nextTuple();
 
-    query = "IF EXISTS(SELECT TICKET FROM OLTP.TICKETSD WHERE TICKET = ? AND IDPRODUCTO = ?) " +
-            "UPDATE OLTP.TICKETSD SET UNIDADES = UNIDADES + ? WHERE TICKET = ? AND IDPRODUCTO = ? " +
+    query = "IF EXISTS(SELECT TICKET FROM OLTP.TICKETSD WHERE TICKET = ? AND producto = ?) " +
+            "UPDATE OLTP.TICKETSD SET UNIDADES = UNIDADES + ? WHERE TICKET = ? AND producto = ? " +
             "ELSE " +
             "INSERT INTO OLTP.TICKETSD VALUES(?,?,?,?)";
     
     st = conexion.prepareStatement(query);
-
+    System.out.println("Empezamos con TicketsD");
     while (extractorTicketD.hasNextTuple()) {
       String[] tupla = extractorTicketD.nextTuple();
       for (int i = 0; i < 5; i++) {
@@ -57,7 +58,7 @@ public class Main {
     SQLServerConnection db;
     Connection conn;
     try {
-      db = new SQLServerConnection("localhost", "Importaciones", "sa", "Aa252328");
+      db = new SQLServerConnection("localhost", "Proyecto", "sa", "Aa252328");
       conn = db.getConnection();
     } catch (Exception e) {
       System.out.println(e.getMessage());
