@@ -1,6 +1,25 @@
 import java.util.Random;
 
 public class Rutinas {
+  private static double valorDivisaMXN(String paisOrigen) {
+    return switch(paisOrigen) {
+      case "Canada" -> 12.01;
+      case "Usa" -> 16.44;
+      case "South Korea" -> 0.012;
+      case "Netherlands", "Spain", "Germany", "Italy" -> 17.63;
+      case "China" -> 2.27;
+      case "Japan" -> 0.11;
+      case "Brazil" -> 3.23;
+      case "Australia" -> 10.75;
+      default -> 1;
+    };
+  }
+
+  public static String convertirDivisaAMXN(String paisOrigen, double valor) {        
+    double convertido = valor * valorDivisaMXN(paisOrigen);
+    return String.format("%.4f", convertido);
+  }
+
   public static String normalizarAtributo(String atributo) {
     atributo = atributo.trim().toLowerCase();
     StringBuilder cd = new StringBuilder(atributo);
@@ -42,7 +61,7 @@ public class Rutinas {
   public static String getPaisOrigen(String marcaVehiculo) {
     return switch (marcaVehiculo) {
       case "Ford", "Dodge", "Chevrolet" -> "USA";
-      case "Dina", "Vw" -> "Japon";
+      case "Dina", "Vw" -> "Japan";
       default -> "??";
     };
   }

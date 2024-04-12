@@ -1,12 +1,12 @@
--- ESTRUCTURA GENERAL, MEJORAR
 create database Importaciones
 go
+
 use Importaciones
 go
+
 create schema OLTP
 go
 
--- ESTADO,CIUDAD,MARCA,MODELO,AÑO,FECHA,PRECIO
 create table OLTP.Importaciones(
   ID int identity primary key not null,
   Estado nvarchar(40) not null,
@@ -20,6 +20,7 @@ create table OLTP.Importaciones(
   PaisDeOrigen nvarchar(40) not null
 )
 go
+select * from OLTP.Importaciones
 create table OLTP.TicketsH(
 
 )
@@ -34,7 +35,8 @@ go
 create table Dimension.PaisDeOrigen(
   nombre nvarchar(40) not null primary key,
   continente nvarchar(40) not null,
-  poblacion nvarchar(40) not null, -- MUY_POBLADO POBLADO_NORMAL POCO_POBLADO
+  poblacion nvarchar(40) not null, -- [MUY POBLADO] [POBLADO NORMAL] [POCO POBLADO]
+  cultura nvarchar(40) not null -- [CRISTIANISMO] [CATOLICISMO] [JUDISMO] [ADVENTISMO] [ETC]
 )
 go
 create table Dimension.MedioDeTransporte(
@@ -43,19 +45,26 @@ create table Dimension.MedioDeTransporte(
   seguridad nvarchar(40) not null, -- ALTA MEDIA BAJA
   costo nvarchar(40) not null, -- COSTOSO NORMAL ECONOMICO
   duracionTraslado nvarchar(40) not null -- LARGO MEDIO CHICO
+  impactoAmbiental nvarchar(40) not null -- [SIN IMPACTO AMBIENTAL] [CON IMPACTO AMBIENTAL]
 )
 go
-create table Dimension.Fecha(
+
+create table Dimension.Fecha (
   fecha date primary key not null,
   año int not null,
-  mes nvarchar(40) not null,
-  dia int not null,
-  semana int not null,
-  diaSemana nvarchar(40) not null,
-  bimestre nvarchar(40) not null,
-  trimestre nvarchar(40) not null,
-  cuatrimestre nvarchar(40) not null,
-  semestre nvarchar(40) not null
+  nombreMes nvarchar(40) not null,
+  diaMes int not null,
+  diaAño int not null,
+  semanaAño int not null,
+  semanaMes int not null,
+  nombreDiaSemana nvarchar(40) not null,
+  mesesBimestre nvarchar(40) not null,
+  mesesTrimestre nvarchar(40) not null,
+  mesesCuatrimestre nvarchar(40) not null,
+  mesesSemestre nvarchar(40) not null,
+  nombreTemporada nvarchar(40) not null,
+  esFinDeSemana nvarchar(20) not null,
+  estaEnAñoBisiesto nvarchar(20) not null
 )
 go
 create table Dimension.Importe(
