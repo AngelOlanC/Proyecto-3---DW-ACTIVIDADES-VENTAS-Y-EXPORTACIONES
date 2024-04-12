@@ -228,4 +228,16 @@ public class Rutinas {
 		}
 		return "20" + separacion[2] + "/" + mesCorregido + "/" + separacion[0];
 	}
+
+  
+	public static String limpiarCampo(String campo) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < campo.length(); i++) {
+			if (campo.charAt(i) == '.')
+				break;
+			if (campo.charAt(i) != ' ' && campo.charAt(i) != '$')
+				sb.append(campo.charAt(i));
+		}
+		return sb.toString();
+	}
 }

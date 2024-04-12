@@ -46,33 +46,3 @@ as begin
 	return 'No es año bisiesto'
 end
 go
-
-create proc sp_AgregarMedioDeTransporte 
-as
-begin
-end --??
-go
-
-create proc sp_AgregarMedioDeTransporte 
-as
-begin
-end --??
-go
-
-create proc sp_CargarVMImportaciones
-as begin
-	select paisDeOrigen, medioDeTransporte, fecha, importe = SUM(precio), unidades = COUNT(*) 
-	into VistaMaterializada.Importaciones 
-	from OLTP.Importaciones
-	group by paisDeOrigen, medioDeTransporte, fecha
-
-	alter table VistaMaterializada.Importaciones
-	add constraint PK_VMImportaciones primary key(PaisOrigen, MedioTransporte, Fecha)
-	
-	alter table VistaMaterializada.Importaciones
-	add constraint FK_VMImportaciones_PaisOrigen foreign key(paisOrigen) references Dimension.paisOrigen(nombre)
-	alter table VistaMaterializada.Importaciones
-	add constraint FK_VMImportaciones_MedioTransporte  foreign key(medioTransporte) references Dimension.medioTransporte(nombre)
-	alter table VistaMaterializada.Importaciones
-	add constraint FK_VMImportaciones_Fecha  foreign key(Fecha) references Dimension.fecha(fecha)
-end

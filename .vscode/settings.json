@@ -1,7 +1,7 @@
 {
   "java.project.sourcePaths": [
     "ExtraccionLimpiezaCarga",
-    "ExtraccionLimpiezaCarga/Importaciones"
+    "ExtraccionLimpiezaCarga/Ventas"
   ],
   "java.project.referencedLibraries": [
     "c:\\Users\\Angel\\Downloads\\sqljdbc_12.6\\enu\\jars\\mssql-jdbc-12.6.1.jre11.jar",

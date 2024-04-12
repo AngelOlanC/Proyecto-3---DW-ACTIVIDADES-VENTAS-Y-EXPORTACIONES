@@ -25,7 +25,7 @@ go
 -- FOLIO,FECHA,ESTADO,CIUDAD,TIENDA,EMPLEADO
 -- 00000001,18/mar/20,25,1,61,93
 create table OLTP.TicketsH(
-	folio int primary key not null,
+	ticket int primary key not null,
 	fecha date not null,
 	estado int not null,
 	ciudad int not null,
@@ -36,7 +36,7 @@ go
 --FOLIO,PRODUCTO,UNIDADES,PRECIO,TOTAL
 --00000001,330,3,506.00,$1 518.00
 create table OLTP.TicketsD(
-	folio int not null foreign key references OLTP.TicketsH(folio),
+	ticket int not null foreign key references OLTP.TicketsH(folio),
 	producto int not null,
 	unidades int not null,
 	precio decimal(16, 2) not null,
@@ -97,8 +97,8 @@ go
 create table Dimension.PorDefinir2(
 )
 go
--- TABLA AUXILIAR
 
+--------------------------------- TABLA AUXILIAR
 create schema Auxiliar
 go
 create table Auxiliar.Cuenta2022(
