@@ -6,7 +6,6 @@ go
 
 create schema OLTP
 go
-
 create table OLTP.Importaciones(
   ID int identity primary key not null,
   Estado nvarchar(40) not null,
@@ -20,13 +19,29 @@ create table OLTP.Importaciones(
   PaisDeOrigen nvarchar(40) not null
 )
 go
-select * from OLTP.Importaciones
-create table OLTP.TicketsH(
 
+select * from OLTP.Importaciones
+go
+-- FOLIO,FECHA,ESTADO,CIUDAD,TIENDA,EMPLEADO
+-- 00000001,18/mar/20,25,1,61,93
+create table OLTP.TicketsH(
+	folio int primary key not null,
+	fecha date not null,
+	estado int not null,
+	ciudad int not null,
+	tienda int not null,
+	empleado int not null
 )
 go
+--FOLIO,PRODUCTO,UNIDADES,PRECIO,TOTAL
+--00000001,330,3,506.00,$1 518.00
 create table OLTP.TicketsD(
-
+	folio int not null foreign key references OLTP.TicketsH(folio),
+	producto int not null,
+	unidades int not null,
+	precio decimal(16, 2) not null,
+	total decimal(16, 2) not null,
+	primary key(folio, producto),
 )
 go
 --------------------------------- DIMENSIONES USADAS EN LAS VM
@@ -34,18 +49,24 @@ create schema Dimension
 go
 create table Dimension.PaisDeOrigen(
   nombre nvarchar(40) not null primary key,
-  continente nvarchar(40) not null,
-  poblacion nvarchar(40) not null, -- [MUY POBLADO] [POBLADO NORMAL] [POCO POBLADO]
-  cultura nvarchar(40) not null -- [CRISTIANISMO] [CATOLICISMO] [JUDISMO] [ADVENTISMO] [ETC]
+  continente nvarchar(40) not null, -- [Asia, Europa, America, Africa, Oceania]
+  divisa nvarchar(40) not null, --
+  densidadDePoblacion nvarchar(40) not null, -- [Pais muy poblado] [Pais con poblacion normal] [Pais poco poblado]
+  cultura nvarchar(40) not null, -- [Pais cristiano] [Pais catolico] [Pais judio] [Pais adventista] u cualquier otro
+  clima nvarchar(40) not null,
+  costoDeVida nvarchar(40) not null -- [Costo de vida alto] [Costo de vida normal] [Costo de vida bajo]
 )
 go
 create table Dimension.MedioDeTransporte(
-  nombre nvarchar(40) not null primary key,
-  tipo nvarchar(40) not null, -- AEREO, MARITIMO, TERRESTRE
-  seguridad nvarchar(40) not null, -- ALTA MEDIA BAJA
-  costo nvarchar(40) not null, -- COSTOSO NORMAL ECONOMICO
-  duracionTraslado nvarchar(40) not null -- LARGO MEDIO CHICO
-  impactoAmbiental nvarchar(40) not null -- [SIN IMPACTO AMBIENTAL] [CON IMPACTO AMBIENTAL]
+  nombre nvarchar(40) not null primary key, -- [Carretera, Ferroviario, Avion, Barco]
+  tipo nvarchar(40) not null, -- [Transporte terrestre] [Transporte aereo] [Transporte naval]
+  seguridad nvarchar(40) not null, -- [Trasporte seguro] [Transporte con seguridad promedio] [Transporte poco seguro]
+  costo nvarchar(40) not null, -- [Costo de transporte caro] [Costo de transporte normal] [Costo de transporte economico]
+  duracionTraslado nvarchar(40) not null, -- [Transporte muy lento] [Traslado lento] [Traslado normal] [Traslado rapido]
+  impactoAmbiental nvarchar(40) not null, -- [Traslado con impacto ambiental] [Transporte sin impacto ambiental]
+  capacidadCarga nvarchar(40) not null, -- [Mucha capacidad de carga] [Capacidad de carga normal] [Poca capacidad de carga]
+  tipoCombustible nvarchar(40) not null, -- [Gasolina] [Diesel] [Gas natural] [Electricidad] [Combustible de aviacion]
+  seguimientoEnvios nvarchar(40) not null -- [Seguimiento alto] [Seguimiento limitado] [Sin seguimiento]
 )
 go
 
@@ -67,36 +88,13 @@ create table Dimension.Fecha (
   estaEnAñoBisiesto nvarchar(20) not null
 )
 go
-create table Dimension.Importe(
 
-)
-go
-create table Dimension.Unidades(
-
-)
-go
-create table Dimension.MayorCantidadUnidadesVendidas(
-
-)
-go
 create table Dimension.PorDefinir1(
 
 )
 go
+
 create table Dimension.PorDefinir2(
-
-)
-go
------------------------------ VISTAS MATERIALIZADAS
-
-create schema VistasMaterializadas
-go
-create table VistasMaterializadas.Importaciones(
-
-)
-go
-create table VistasMaterializadas.Ventas(
-
 )
 go
 -- TABLA AUXILIAR

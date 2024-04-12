@@ -60,7 +60,7 @@ public class Rutinas {
 
   public static String getPaisOrigen(String marcaVehiculo) {
     return switch (marcaVehiculo) {
-      case "Ford", "Dodge", "Chevrolet" -> "USA";
+      case "Ford", "Dodge", "Chevrolet" -> "Usa";
       case "Dina", "Vw" -> "Japan";
       default -> "??";
     };

@@ -47,44 +47,32 @@ as begin
 end
 go
 
-alter proc sp_AgregarFecha @fecha date
+create proc sp_AgregarMedioDeTransporte 
+as
+begin
+end --??
+go
+
+create proc sp_AgregarMedioDeTransporte 
+as
+begin
+end --??
+go
+
+create proc sp_CargarVMImportaciones
 as begin
-  insert into Dimension.Fecha(fecha, año, nombreMes, diaMes, diaAño, semanaAño, semanaMes, 
-							nombreDiaSemana, mesesBimestre, mesesTrimestre, mesesCuatrimestre, 
-							mesesSemestre, nombreTemporada, esFinDeSemana, estaEnAñoBisiesto)
-		values (@fecha, year(@fecha), datename(month, @fecha), day(@fecha), datepart(dayofyear, @fecha),
-				datepart(wk, @fecha), (day(@fecha) - 1) / 7 + 1, datename(weekday, @fecha),
-				dbo.GetNmestre(2, month(@fecha)), dbo.GetNmestre(3, month(@fecha)), 
-				dbo.GetNmestre(4, month(@fecha)), dbo.GetNmestre(6, month(@fecha)),
-				dbo.getNombreTemporada(month(@fecha), day(@fecha)), 
-				dbo.EsFinDeSemana(@fecha), dbo.EsAñoBisiesto(year(@fecha)))
+	select paisDeOrigen, medioDeTransporte, fecha, importe = SUM(precio), unidades = COUNT(*) 
+	into VistaMaterializada.Importaciones 
+	from OLTP.Importaciones
+	group by paisDeOrigen, medioDeTransporte, fecha
+
+	alter table VistaMaterializada.Importaciones
+	add constraint PK_VMImportaciones primary key(PaisOrigen, MedioTransporte, Fecha)
+	
+	alter table VistaMaterializada.Importaciones
+	add constraint FK_VMImportaciones_PaisOrigen foreign key(paisOrigen) references Dimension.paisOrigen(nombre)
+	alter table VistaMaterializada.Importaciones
+	add constraint FK_VMImportaciones_MedioTransporte  foreign key(medioTransporte) references Dimension.medioTransporte(nombre)
+	alter table VistaMaterializada.Importaciones
+	add constraint FK_VMImportaciones_Fecha  foreign key(Fecha) references Dimension.fecha(fecha)
 end
-go
-
-create proc dbo.sp_AgregarRangoDeFechas @fechaInicio date, @fechaFin date
-as
-begin
-  while @fechaInicio < @fechaFin
-  begin
-    exec sp_AgregarFecha @fechaInicio
-    set @fechaInicio = dateAdd(day, 1, @fechaInicio)
-  end
-end
-go
-
-exec dbo.sp_AgregarRangoDeFechas '2015-01-01', '2024-01-01'
-go
-select * from Dimension.Fecha
-go
-
-create proc sp_AgregarMedioDeTransporte 
-as
-begin
-end --??
-go
-
-create proc sp_AgregarMedioDeTransporte 
-as
-begin
-end --??
-go
