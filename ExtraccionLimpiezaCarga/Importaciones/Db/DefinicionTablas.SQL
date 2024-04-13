@@ -87,12 +87,30 @@ create table Dimension.Fecha (
 )
 go
 
-create table Dimension.PorDefinir1(
-
+create table Dimension.Producto(
+  id int primary key not null, -- 1-1000
+  nombre nvarchar(40) not null,
+  tipo nvarchar(40) not null,
+  marca nvarchar(40) not null,
+  proveedor nvarchar(40) not null,
+  esPerecedero nvarchar(40) not null, -- [Es un producto perecedero] [Es un producto no perecedero]
+  edadObjetivo nvarchar(40) not null, -- [Producto para bebes] [Producto para infantes] [Producto para adolescentes] [Producto para jovenes] [Producto para adultos] [Producto para personas mayores]
+  esNacional nvarchar(40) not null, -- [Es un producto nacional] [Es un producto extranjero]
+  añoIngreso nvarchar(40) not null, -- [Producto ingresado en 2020] [Producto ingresado en 2021] [Producto ingresado en 2022] [Ingresado en 2023]
+  peso nvarchar(40) not null, -- [Producto de menos de 1kg] [Producto de 1-5 kg] [Producto de 10-20 kg] [Producto de 20-50 kg] [Producto de mas de 50 kg]
+  esFragil nvarchar(40) not null -- [Es un producto fragil] [No es un producto fragil]
 )
 go
 
-create table Dimension.PorDefinir2(
+create table Dimension.Estado(
+  nombre nvarchar(40) not null,
+  zona nvarchar(40) not null, -- [Zona norte] [Zona centro] [Zona sur]
+  clima nvarchar(40) not null, --
+  ambiente nvarchar(40) not null,
+  giroPrincipal nvarchar(40) not null,
+  culturaDominante nvarchar(40) not null,
+  musicaDominante nvarchar(40) not null,
+  
 )
 go
 
