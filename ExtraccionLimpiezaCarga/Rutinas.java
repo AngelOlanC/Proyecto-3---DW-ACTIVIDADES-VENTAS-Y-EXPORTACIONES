@@ -98,82 +98,82 @@ public class Rutinas {
     return medio;
   }
 
-  public static String normalizarFecha(String fecha) {
-    String[] separado = fecha.split("/");
-    
-    if (separado[0].length() == 1) {
-      separado[0] = "0" + separado[0];
-    }
-    if (separado[1].length() == 1) {
-      separado[1] = "0" + separado[1];
-    }
-    if (separado[2].length() == 2) {
-      separado[2] = "20" + separado[2];
-    }
-    
-    if (separado[1].equals("02") && Integer.parseInt(separado[0]) > 28) {
-      separado[0] = "28";
-    }
-
-    if ((separado[1].equals("04") || separado[1].equals("06") || 
-        separado[1].equals("09") || separado[1].equals("11")) && separado[0].equals("31")) {
-          separado[0] = "30";
-        }
-
-    return separado[2] + separado[1] + separado[0];
+public static String normalizarFecha(String fecha) {
+  String[] separado = fecha.split("/");
+  
+  if (separado[0].length() == 1) {
+    separado[0] = "0" + separado[0];
+  }
+  if (separado[1].length() == 1) {
+    separado[1] = "0" + separado[1];
+  }
+  if (separado[2].length() == 2) {
+    separado[2] = "20" + separado[2];
+  }
+  
+  if (separado[1].equals("02") && Integer.parseInt(separado[0]) > 28) {
+    separado[0] = "28";
   }
 
-  public static String[] generarDestinoAleatoriamente() {
-    String[] estados = {
-      "Aguascalientes", "Baja California", "Baja California Sur", "Campeche",
-      "Chiapas", "Chihuahua", "Coahuila", "Colima", "Durango", "Guanajuato",
-      "Guerrero", "Hidalgo", "Jalisco", "Mexico", "Michoacan", "Morelos",
-      "Nayarit", "Nuevo Leon", "Oaxaca", "Puebla", "Queretaro", "Quintana Roo",
-      "San Luis Potosi", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas",
-      "Tlaxcala", "Veracruz", "Yucatan", "Zacatecas", "Ciudad de Mexico"
-   };
+  if ((separado[1].equals("04") || separado[1].equals("06") || 
+      separado[1].equals("09") || separado[1].equals("11")) && separado[0].equals("31")) {
+        separado[0] = "30";
+      }
 
-    String[][] ciudades = {
-      { "Aguascalientes", "Calvillo", "Jesus Maria", "Pabellon de Arteaga" },
-      { "Mexicali", "Tijuana", "Ensenada", "Tecate" },
-      { "La Paz", "Los Cabos", "Loreto", "Santa Rosalia" },
-      { "San Francisco de Campeche", "Ciudad del Carmen", "Champoton", "Calkiní" },
-      { "Tuxtla Gutierrez", "San Cristobal de las Casas", "Tapachula", "Comitan" },
-      { "Chihuahua", "Ciudad Juarez", "Parral", "Cuauhtemoc" },
-      { "Saltillo", "Torreon", "Monclova", "Piedras Negras" },
-      { "Colima", "Manzanillo", "Tecoman", "Villa de Alvarez" },
-      { "Victoria de Durango", "Gomez Palacio", "Lerdo", "Durango" },
-      { "Guanajuato", "Leon", "Celaya", "Irapuato" },
-      { "Chilpancingo de los Bravo", "Acapulco", "Iguala", "Taxco" },
-      { "Pachuca de Soto", "Tulancingo", "Tizayuca", "Tepeapulco" },
-      { "Guadalajara", "Zapopan", "Tlaquepaque", "Tlajomulco de Zuniga" },
-      { "Toluca de Lerdo", "Ecatepec de Morelos", "Nezahualcoyotl", "Naucalpan de Juarez" },
-      { "Morelia", "Uruapan", "Zamora", "Lázaro Cárdenas" },
-      { "Cuernavaca", "Cuautla", "Jiutepec", "Temixco" },
-      { "Tepic", "Xalisco", "Compostela", "Nayarit" },
-      { "Monterrey", "Guadalupe", "San Nicolas de los Garza", "Apodaca" },
-      { "Oaxaca de Juarez", "Santa Cruz Xoxocotlan", "San Bartolo Coyotepec", "Tlacolula" },
-      { "Puebla de Zaragoza", "Cholula", "Tehuacan", "Atlixco" },
-      { "Santiago de Queretaro", "Corregidora", "El Marques", "San Juan del Rio" },
-      { "Chetumal", "Cancun", "Playa del Carmen", "Cozumel" },
-      { "San Luis Potosi", "Soledad de Graciano Sanchez", "Matehuala", "Ciudad Valles" },
-      { "Culiacan", "Mazatlan", "Los Mochis", "Guasave" },
-      { "Hermosillo", "Nogales", "Ciudad Obregon", "Guaymas" },
-      { "Villahermosa", "Cardenas", "Comalcalco", "Paraiso" },
-      { "Ciudad Victoria", "Reynosa", "Matamoros", "Nuevo Laredo" },
-      { "Tlaxcala de Xicohtencatl", "Apizaco", "Huamantla", "Calpulalpan" },
-      { "Xalapa-Enriquez", "Veracruz", "Boca del Rio", "Orizaba" },
-      { "Merida", "Valladolid", "Progreso", "Tizimin" },
-      { "Zacatecas", "Guadalupe", "Fresnillo", "Jerez de Garcia Salinas" },
-      { "Ciudad de Mexico", "Iztapalapa", "Gustavo A. Madero", "Venustiano Carranza" }
-    };
+  return separado[2] + separado[1] + separado[0];
+}
 
-    Random rnd = new Random();
-    int i = rnd.nextInt(32), j = rnd.nextInt(3);
+public static String[] generarDestinoAleatoriamente() {
+  String[] estados = {
+    "Aguascalientes", "Baja California", "Baja California Sur", "Campeche",
+    "Chiapas", "Chihuahua", "Coahuila", "Colima", "Durango", "Guanajuato",
+    "Guerrero", "Hidalgo", "Jalisco", "Mexico", "Michoacan", "Morelos",
+    "Nayarit", "Nuevo Leon", "Oaxaca", "Puebla", "Queretaro", "Quintana Roo",
+    "San Luis Potosi", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas",
+    "Tlaxcala", "Veracruz", "Yucatan", "Zacatecas", "Ciudad de Mexico"
+  };
 
-    String[] destino = {estados[i], ciudades[i][j]};
-    return destino;
-  }
+  String[][] ciudades = {
+    { "Aguascalientes", "Calvillo", "Jesus Maria", "Pabellon de Arteaga" },
+    { "Mexicali", "Tijuana", "Ensenada", "Tecate" },
+    { "La Paz", "Los Cabos", "Loreto", "Santa Rosalia" },
+    { "San Francisco de Campeche", "Ciudad del Carmen", "Champoton", "Calkiní" },
+    { "Tuxtla Gutierrez", "San Cristobal de las Casas", "Tapachula", "Comitan" },
+    { "Chihuahua", "Ciudad Juarez", "Parral", "Cuauhtemoc" },
+    { "Saltillo", "Torreon", "Monclova", "Piedras Negras" },
+    { "Colima", "Manzanillo", "Tecoman", "Villa de Alvarez" },
+    { "Victoria de Durango", "Gomez Palacio", "Lerdo", "Durango" },
+    { "Guanajuato", "Leon", "Celaya", "Irapuato" },
+    { "Chilpancingo de los Bravo", "Acapulco", "Iguala", "Taxco" },
+    { "Pachuca de Soto", "Tulancingo", "Tizayuca", "Tepeapulco" },
+    { "Guadalajara", "Zapopan", "Tlaquepaque", "Tlajomulco de Zuniga" },
+    { "Toluca de Lerdo", "Ecatepec de Morelos", "Nezahualcoyotl", "Naucalpan de Juarez" },
+    { "Morelia", "Uruapan", "Zamora", "Lázaro Cárdenas" },
+    { "Cuernavaca", "Cuautla", "Jiutepec", "Temixco" },
+    { "Tepic", "Xalisco", "Compostela", "Nayarit" },
+    { "Monterrey", "Guadalupe", "San Nicolas de los Garza", "Apodaca" },
+    { "Oaxaca de Juarez", "Santa Cruz Xoxocotlan", "San Bartolo Coyotepec", "Tlacolula" },
+    { "Puebla de Zaragoza", "Cholula", "Tehuacan", "Atlixco" },
+    { "Santiago de Queretaro", "Corregidora", "El Marques", "San Juan del Rio" },
+    { "Chetumal", "Cancun", "Playa del Carmen", "Cozumel" },
+    { "San Luis Potosi", "Soledad de Graciano Sanchez", "Matehuala", "Ciudad Valles" },
+    { "Culiacan", "Mazatlan", "Los Mochis", "Guasave" },
+    { "Hermosillo", "Nogales", "Ciudad Obregon", "Guaymas" },
+    { "Villahermosa", "Cardenas", "Comalcalco", "Paraiso" },
+    { "Ciudad Victoria", "Reynosa", "Matamoros", "Nuevo Laredo" },
+    { "Tlaxcala de Xicohtencatl", "Apizaco", "Huamantla", "Calpulalpan" },
+    { "Xalapa-Enriquez", "Veracruz", "Boca del Rio", "Orizaba" },
+    { "Merida", "Valladolid", "Progreso", "Tizimin" },
+    { "Zacatecas", "Guadalupe", "Fresnillo", "Jerez de Garcia Salinas" },
+    { "Ciudad de Mexico", "Iztapalapa", "Gustavo A. Madero", "Venustiano Carranza" }
+  };
+
+  Random rnd = new Random();
+  int i = rnd.nextInt(32), j = rnd.nextInt(3);
+
+  String[] destino = {estados[i], ciudades[i][j]};
+  return destino;
+}
   
 	public static String corregirFecha(String fecha) {
 		String[] separacion = fecha.split("/");

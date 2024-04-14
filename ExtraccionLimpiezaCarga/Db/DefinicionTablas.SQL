@@ -86,39 +86,30 @@ create table Dimension.Fecha (
   estaEnAñoBisiesto nvarchar(20) not null
 )
 go
-
 create table Dimension.Producto(
   id int primary key not null, -- 1-1000
-  nombre nvarchar(40) not null,
-  tipo nvarchar(40) not null,
-  marca nvarchar(40) not null,
-  proveedor nvarchar(40) not null,
-  esPerecedero nvarchar(40) not null, -- [Es un producto perecedero] [Es un producto no perecedero]
-  edadObjetivo nvarchar(40) not null, -- [Producto para bebes] [Producto para infantes] [Producto para adolescentes] [Producto para jovenes] [Producto para adultos] [Producto para personas mayores]
-  esNacional nvarchar(40) not null, -- [Es un producto nacional] [Es un producto extranjero]
-  añoIngreso nvarchar(40) not null, -- [Producto ingresado en 2020] [Producto ingresado en 2021] [Producto ingresado en 2022] [Ingresado en 2023]
-  peso nvarchar(40) not null, -- [Producto de menos de 1kg] [Producto de 1-5 kg] [Producto de 10-20 kg] [Producto de 20-50 kg] [Producto de mas de 50 kg]
-  esFragil nvarchar(40) not null -- [Es un producto fragil] [No es un producto fragil]
+  nombre nvarchar(80) not null,
+  tipo nvarchar(80) not null,
+  marca nvarchar(80) not null,
+  proveedor nvarchar(80) not null,
+  esPerecedero nvarchar(80) not null, -- [Es un producto perecedero] [Es un producto no perecedero]
+  edadObjetivo nvarchar(80) not null, -- [Producto para bebes] [Producto para infantes] [Producto para adolescentes] [Producto para jovenes] [Producto para adultos] [Producto para personas mayores]
+  esNacional nvarchar(80) not null, -- [Es un producto nacional] [Es un producto extranjero]
+  añoIngreso nvarchar(80) not null, -- [Producto ingresado en 2020] [Producto ingresado en 2021] [Producto ingresado en 2022] [Ingresado en 2023]
+  peso nvarchar(80) not null, -- [Producto de menos de 1kg] [Producto de 1-5 kg] [Producto de 10-20 kg] [Producto de 20-50 kg] [Producto de mas de 50 kg]
+  esFragil nvarchar(80) not null -- [Es un producto fragil] [No es un producto fragil]
 )
 go
 
 create table Dimension.Estado(
+  id int primary key not null, -- [1] [2] ...
   nombre nvarchar(40) not null,
   zona nvarchar(40) not null, -- [Zona norte] [Zona centro] [Zona sur]
-  clima nvarchar(40) not null, --
-  ambiente nvarchar(40) not null,
-  giroPrincipal nvarchar(40) not null,
-  culturaDominante nvarchar(40) not null,
-  musicaDominante nvarchar(40) not null,
-  
+  clima nvarchar(40) not null, -- []
+  ambiente nvarchar(40) not null, -- []
+  giroPrincipal nvarchar(40) not null, -- [Ganaderia, ]
+  culturaDominante nvarchar(40) not null, -- [Cultura cristiana dominante] ...
+  musicaDominante nvarchar(40) not null, -- [Se escucha banda] [Se escuchan corridos] ...
+  criminalidad nvarchar(40) not null, -- [Estado con criminalidad baja] [Estado con criminalidad alta]
 )
 go
-
---------------------------------- TABLA AUXILIAR
-create schema Auxiliar
-go
-create table Auxiliar.Cuenta2022(
-  numero int
-)
-go
-insert Auxiliar.Cuenta2022 values(0)

@@ -48,12 +48,9 @@ public class Main {
       throws FileNotFoundException, IOException, SQLException {
     Extractor extractor = new Extractor("ExtraccionLimpiezaCarga/Datos/synergy_logistics_database111.csv");
     extractor.nextTuple();
-    
+
     System.out.println("Extractor 2 creado");
 
-    ResultSet rs = conn.createStatement().executeQuery("SELECT numero FROM Auxiliar.Cuenta2022");
-    rs.next();
-  
     String insertStatement = "INSERT INTO OLTP.Importaciones" +
                             "(estado, ciudad, marca, modelo, año, fecha, precio, medioDeTransporte, paisDeOrigen)" +
                               " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -65,7 +62,7 @@ public class Main {
       if (!tuple[3].equals("Mexico")) {
         continue;
       }
-
+      
       for (int i = 0; i < tuple.length; i++) {
         tuple[i] = Rutinas.normalizarAtributo(tuple[i]);
       }
