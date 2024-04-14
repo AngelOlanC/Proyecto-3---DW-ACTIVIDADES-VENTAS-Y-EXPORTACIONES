@@ -52,7 +52,12 @@ create table Dimension.PaisDeOrigen(
   densidadDePoblacion nvarchar(40) not null, -- [Pais muy poblado] [Pais con poblacion normal] [Pais poco poblado]
   cultura nvarchar(40) not null, -- [Pais cristiano] [Pais catolico] [Pais judio] [Pais adventista] u cualquier otro
   clima nvarchar(40) not null,
-  costoDeVida nvarchar(40) not null -- [Costo de vida alto] [Costo de vida normal] [Costo de vida bajo]
+  ambiente nvarchar(40) not null,
+  costoDeVida nvarchar(40) not null, -- [Costo de vida alto] [Costo de vida normal] [Costo de vida bajo]
+  sistemaPolitico nvarchar(40) not null,
+  TLC nvarchar(40) not null,
+  idiomaOficial nvarchar(40) not null,
+  zonaHoraria nvarchar(40) not null
 )
 go
 create table Dimension.MedioDeTransporte(

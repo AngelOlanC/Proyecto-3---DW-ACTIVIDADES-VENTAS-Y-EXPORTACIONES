@@ -46,3 +46,13 @@ as begin
 	return 'No es año bisiesto'
 end
 go
+
+create procedure sp_limpiarTodo
+as begin
+	drop table Proyecto.VistaMaterializada.Importaciones
+	drop table Proyecto.VistaMaterializada.Ventas
+	drop table Proyecto.Dimension.Estado
+	drop table Proyecto.Dimension.MedioDeTransporte
+	drop table Proyecto.Dimension.PaisDeOrigen
+	drop table Proyecto.Dimension.fecha
+end
