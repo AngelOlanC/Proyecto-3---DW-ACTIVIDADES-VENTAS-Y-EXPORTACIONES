@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Main {
+public class ImportacionesMain {
   private static void ETLArchivo1(SQLServerConnection db, Connection conn) 
       throws FileNotFoundException, IOException, SQLException {
     Extractor extractor = new Extractor("ExtraccionLimpiezaCarga/Datos/ImportacionAutos111.csv");

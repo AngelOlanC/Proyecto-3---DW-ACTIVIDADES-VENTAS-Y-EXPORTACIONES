@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Main {
+public class VentasMain {
   private static void insertarRegistros(SQLServerConnection db) 
       throws SQLException, FileNotFoundException, IOException {
     Extractor extractorTicketH = new Extractor("ExtraccionLimpiezaCarga/Datos/TicketH.csv");
